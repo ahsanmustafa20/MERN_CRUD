@@ -1,15 +1,17 @@
-const expresss = require('express');
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const UserModel = require('./models/User');
 
+require("dotenv").config();
 
-const app = expresss();
+const app = express();
 app.use(cors());
+app.use(express.json());
 
-app.use(expresss.json());
-
-mongoose.connect("mongodb://127.0.0.1:27017/CRUD")
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.log("MongoDB connection error:", err));
 
 app.get("/", (req, res) => {
     UserModel.find({})
@@ -24,14 +26,14 @@ app.post("/create", (req, res) => {
 })
 
 app.get("/getUser/:id", (req, res) => {
-    id = req.params.id;
+    const id = req.params.id;
     UserModel.findById(id)
     .then(user => res.json(user))
     .catch(err => res.json(err))
 })
 
 app.put("/update/:id", (req, res) => {
-    id = req.params.id;
+    const id = req.params.id;
     UserModel.findByIdAndUpdate(id, {
         name: req.body.name,
         email: req.body.email,
@@ -47,7 +49,7 @@ app.delete("/delete/:id", (req, res) => {
     .catch(err => res.json(err))
 })
 
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
