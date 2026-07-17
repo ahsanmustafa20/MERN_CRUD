@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const UserModel = require('./models/User');
+const UserModel = require('../models/User');
 
 require("dotenv").config();
 
@@ -49,7 +49,4 @@ app.delete("/delete/:id", (req, res) => {
     .catch(err => res.json(err))
 })
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app;
