@@ -13,11 +13,15 @@ function Users() {
     }, [])
 
     const handleDelete = (id) => {
-        axios.delete("http://localhost:3000/delete/" + id)
-        .then(res => {console.log(res)
-            window.location.reload()
-        })
-        .catch(err => console.log(err))
+        console.log("Deleting:", id);
+
+        axios.delete(`http://localhost:3000/delete/${id}`)
+            .then(() => {
+                setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+            })
+            .catch((err) => {
+                console.log(err?.response?.data || err.message);
+            });
     }
 
     return(
@@ -36,13 +40,13 @@ function Users() {
                     <tbody>
                         {
                             users.map((user) => {
-                               return <tr>
+                               return <tr key={user._id}>
                                     <td>{user.name}</td>
                                     <td>{user.email}</td>
                                     <td>{user.age}</td>
                                     <td>
                                         <Link to={`/update/${user._id}`} className="btn btn-success">Edit</Link>
-                                        <button className="btn btn-danger" 
+                                        <button type="button" className="btn btn-danger" 
                                         onClick={(e) => handleDelete(user._id)}>Delete</button>
                                     </td>
                                 </tr>

@@ -1,17 +1,18 @@
-const express = require('express');
+require("dotenv").config();
+const expresss = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const UserModel = require('./models/User');
 
-require("dotenv").config();
 
-const app = express();
+const app = expresss();
 app.use(cors());
-app.use(express.json());
+
+app.use(expresss.json());
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log("MongoDB connection error:", err));
+.then(() => console.log("MongoDB Atlas Connected"))
+.catch((err) => console.log(err));
 
 app.get("/", (req, res) => {
     UserModel.find({})
@@ -42,14 +43,27 @@ app.put("/update/:id", (req, res) => {
     .catch(err => res.json(err))
 })
 
-app.delete("/delete/:id", (req, res) => {
-    const id = req.params.id;
-    UserModel.findByIdAndDelete(id)
-    .then(user => res.json(user))
-    .catch(err => res.json(err))
-})
+
+
+app.delete("/delete/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedUser = await UserModel.findByIdAndDelete(id);
+
+        if (!deletedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json({ message: "User deleted", user: deletedUser });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Delete failed", error: err.message });
+    }
+});
+
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
