@@ -7,7 +7,7 @@ function Users() {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:3000")
+        axios.get("https://mern-crud-server-kts5.onrender.com")
         .then(result => setUsers(result.data))
         .catch(err => console.log(err))
     }, [])
@@ -15,7 +15,7 @@ function Users() {
     const handleDelete = (id) => {
         console.log("Deleting:", id);
 
-        axios.delete(`http://localhost:3000/delete/${id}`)
+        axios.delete(`https://mern-crud-server-kts5.onrender.com/delete/${id}`)
             .then(() => {
                 setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
             })

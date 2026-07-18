@@ -11,7 +11,7 @@ function CreateUser() {
 
     const Submit =(e) => {
         e.preventDefault();
-        axios.post("http://localhost:3000/create", { name, email, age })
+        axios.post("https://mern-crud-server-kts5.onrender.com/create", { name, email, age })
             .then(response => {
                 console.log(response.data)
                 navigate("/")

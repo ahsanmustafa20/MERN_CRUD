@@ -12,7 +12,7 @@ function UpdateUser() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:3000/getUser/"+id)
+        axios.get("https://mern-crud-server-kts5.onrender.com/getUser/"+id)
         .then(result => {console.log(result.data)
             setName(result.data.name);
             setEmail(result.data.email);
@@ -23,7 +23,7 @@ function UpdateUser() {
 
     const Update =(e) => {
         e.preventDefault();
-        axios.put("http://localhost:3000/update/" + id, { name, email, age })
+        axios.put("https://mern-crud-server-kts5.onrender.com/update/" + id, { name, email, age })
             .then(response => {
                 console.log(response.data)
                 navigate("/")
